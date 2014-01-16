@@ -29,4 +29,23 @@ class Question < ActiveRecord::Base
     :primary_key => :id
   )
 
+  def results
+    #TRY IN PRY
+    results_with_count = self.answer_choices
+      .select("COUNT(*) AS results_count")
+      .join(:responses)
+      .group("responses.answer_choice_id")
+
+
+
+    # n+1
+    #
+    # answers = Hash.new
+    # self.answer_choices.each do |ac|
+    #   answers[ac.text] = ac.responses.count
+    # end
+    #
+    # answers
+  end
+
 end
