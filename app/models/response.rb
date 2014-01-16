@@ -14,8 +14,8 @@ class Response < ActiveRecord::Base
 
   validates :answer_choice_id, :presence => true
   validates :responder_id, :presence => true
-
   validate :respondent_has_not_already_answered_question
+  validate :author_cannot_respond_to_own_poll
 
   belongs_to(
     :answer_choice,
@@ -31,6 +31,34 @@ class Response < ActiveRecord::Base
     :primary_key => :id
   )
 
+  def author_cannot_respond_to_own_poll
+    # this way fires 3 queries
+    # responder_id == self.answer_choice.question.poll.author_id
+
+    # this way fires 1
+    response_object = Response.find_by_sql([<<-SQL, 26])
+    SELECT
+      author_id
+    FROM
+      ((responses AS r JOIN answer_choices AS ac ON r.answer_choice_id= ac.id) AS rac
+      JOIN
+        questions AS q ON q.id = rac.question_id) AS racq
+        JOIN
+          polls AS p ON p.id = racq.poll_id
+    WHERE
+      answer_choice_id = ?
+    SQL
+
+    author_id = response_object[0].author_id
+
+    if self.responder_id == author_id
+      errors[:base] << "You can't answer a question in your own pollllll!"
+    end
+
+    # incomplete active record sql joins
+   # Response.joins(:answer_choice).joins(:questions).joins(:polls).where('answer_choice_id = ?', 26)
+  end
+
   def respondent_has_not_already_answered_question
     existing_responses = self.existing_responses
 
@@ -39,6 +67,7 @@ class Response < ActiveRecord::Base
     end
   end
 
+  private
 
   def existing_responses
     Response.find_by_sql([<<-SQL, self.responder_id, self.answer_choice_id])
