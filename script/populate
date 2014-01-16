@@ -1,0 +1,69 @@
+# 20.times do |n|
+#   u = User.new
+#   u.user_name = "user#{n}"
+#   u.save!
+# end
+
+#populates polls
+20.times do |n|
+  p = Poll.new
+  p.author_id = n
+  p.title = "title #{n}"
+  p.save!
+end
+
+5.times do |n|
+  p = Poll.new
+  p.author_id = n
+  p.title = "Second title #{n}"
+  p.save!
+end
+
+# populates questions
+20.times do |n|
+  q = Question.new
+  q.poll_id = n
+  q.text = "text #{n}"
+  q.save!
+end
+
+5.times do |n|
+  q = Question.new
+  q.poll_id = n
+  q.text = "Second text #{n}"
+  q.save!
+end
+
+# populates answer_choices
+20.times do |n|
+  a = AnswerChoice.new
+  a.question_id = n
+  a.text = "answer text #{n}"
+  a.save!
+end
+
+5.times do |n|
+  a = AnswerChoice.new
+  a.question_id = n
+  a.text = "Second answer text #{n}"
+  a.save!
+end
+
+# populates responses
+20.times do |n|
+  r = Response.new
+  r.question_id = n
+  r.responder_id = n + 1
+  r.answer_choice_id = n
+
+  r.save!
+end
+
+5.times do |n|
+  r = Response.new
+  r.question_id = n + 1
+  r.responder_id = n
+  r.answer_choice_id = n + 1
+
+  r.save!
+end
