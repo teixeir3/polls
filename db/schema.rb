@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140116140550) do
+ActiveRecord::Schema.define(:version => 20140116152804) do
 
   create_table "answer_choices", :force => true do |t|
     t.string   "text"
@@ -20,6 +20,9 @@ ActiveRecord::Schema.define(:version => 20140116140550) do
     t.datetime "updated_at",  :null => false
   end
 
+  add_index "answer_choices", ["question_id"], :name => "index_answer_choices_on_question_id"
+  add_index "answer_choices", ["text"], :name => "index_answer_choices_on_text"
+
   create_table "polls", :force => true do |t|
     t.integer  "author_id"
     t.string   "title"
@@ -27,12 +30,18 @@ ActiveRecord::Schema.define(:version => 20140116140550) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "polls", ["author_id"], :name => "index_polls_on_author_id"
+  add_index "polls", ["title"], :name => "index_polls_on_title", :unique => true
+
   create_table "questions", :force => true do |t|
     t.integer  "poll_id"
     t.string   "text"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "questions", ["poll_id"], :name => "index_questions_on_poll_id"
+  add_index "questions", ["text"], :name => "index_questions_on_text"
 
   create_table "responses", :force => true do |t|
     t.integer  "answer_choice_id"
@@ -42,10 +51,16 @@ ActiveRecord::Schema.define(:version => 20140116140550) do
     t.datetime "updated_at",       :null => false
   end
 
+  add_index "responses", ["answer_choice_id"], :name => "index_responses_on_answer_choice_id"
+  add_index "responses", ["question_id"], :name => "index_responses_on_question_id"
+  add_index "responses", ["responder_id"], :name => "index_responses_on_responder_id"
+
   create_table "users", :force => true do |t|
     t.string   "user_name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "users", ["user_name"], :name => "index_users_on_user_name", :unique => true
 
 end
