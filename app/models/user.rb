@@ -11,6 +11,8 @@
 class User < ActiveRecord::Base
   # attr_accessible :title, :body
 
+  validates :user_name, :presence => true, :uniqueness => true
+
   has_many(
     :authored_polls,
     :class_name => 'Poll',

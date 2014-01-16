@@ -13,6 +13,10 @@
 class Response < ActiveRecord::Base
   # attr_accessible :title, :body
 
+  validates :answer_choice_id, :presence => true
+  validates :responder_id, :presence => true
+  validates :question_id, :presence => true
+
   belongs_to(
     :answer_choice,
     :class_name => "AnswerChoice",

@@ -12,6 +12,9 @@
 class Poll < ActiveRecord::Base
   # attr_accessible :title, :body
 
+  validates :author_id, :presence => true
+  validates :title, :presence => true
+
   belongs_to(
     :author,
     :class_name => 'User',

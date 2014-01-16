@@ -12,6 +12,9 @@
 class Question < ActiveRecord::Base
   # attr_accessible :title, :body
 
+  validates :poll_id, :presence => true
+  validates :text, :presence => true
+
   has_many(
     :answer_choices,
     :class_name => "AnswerChoice",

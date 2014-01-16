@@ -11,7 +11,9 @@
 
 class AnswerChoice < ActiveRecord::Base
   # attr_accessible :title, :body
-
+  validates :text, :presence => true
+  validates :question_id, :presence => true
+  
   belongs_to(
     :question,
     :class_name => "Question",
